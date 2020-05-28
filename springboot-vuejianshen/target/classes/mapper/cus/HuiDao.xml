@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ye.modules.cus.dao.HuiDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.ye.modules.cus.entity.HuiEntity" id="huiMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="content" column="content"/>
+        <result property="pic" column="pic"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.ye.modules.cus.entity.HuiEntity">
+		select * from t_hui where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.ye.modules.cus.entity.HuiEntity">
+		select * from t_hui
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and  `name` like concat('%',#{name},'%')
+			</if>
+ 
+		</where>
+		
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by create_time desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="queryListByUser" resultType="com.ye.modules.cus.entity.HuiEntity">
+		select * from t_hui	where user_id = #{user_id}			
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by create_time desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from t_hui 
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and  `name` like concat('%',#{name},'%')
+			</if>
+ 
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.ye.modules.cus.entity.HuiEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into t_hui
+		(
+			`name`, 
+			`content`, 
+			`pic`, 
+			`create_time`, 
+			`user_id`
+		)
+		values
+		(
+			#{name}, 
+			#{content}, 
+			#{pic}, 
+			#{createTime}, 
+			#{userId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.ye.modules.cus.entity.HuiEntity">
+		update t_hui 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="pic != null">`pic` = #{pic}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from t_hui where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_hui where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

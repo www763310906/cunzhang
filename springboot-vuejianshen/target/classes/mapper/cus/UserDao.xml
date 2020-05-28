@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ye.modules.cus.dao.UserDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.ye.modules.cus.entity.UserEntity" id="userMap">
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="nickname" column="nickname"/>
+        <result property="phone" column="phone"/>
+        <result property="userType" column="user_type"/>
+        <result property="pic" column="pic"/>
+        <result property="sex" column="sex"/>
+        <result property="createTime" column="create_time"/>
+        <result property="address" column="address"/>
+         <result property="addressPhone" column="address_phone"/>
+          <result property="addressRealname" column="address_realname"/>
+          <result property="addressProv" column="address_prov"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.ye.modules.cus.entity.UserEntity">
+		select * from t_user where id = #{value}
+	</select>
+	<select id="queryTotal" resultType="int">
+		select count(*) from t_user 
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and  `name` like concat('%',#{name},'%')
+			</if>
+			<if test="username != null and username.trim() != ''">
+				and `username` = #{username}
+			</if>
+			<if test="userType != null and userType.trim() != ''">
+				and `user_type` =#{userType}
+			</if>
+ 
+		</where>
+	</select>
+	
+	<select id="queryByOpenId" resultType="com.ye.modules.cus.entity.UserEntity">
+		select * from t_user where open_id = #{value}
+	</select>
+		 
+	<select id="findByUsername" resultType="com.ye.modules.cus.entity.UserEntity">
+		select * from t_user where username = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.ye.modules.cus.entity.UserEntity">
+		select * from t_user
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and  `username` like concat('%',#{name},'%')
+			</if>
+			<if test="nickname != null and nickname.trim() != ''">
+				and  `nickname` like concat('%',#{nickname},'%')
+			</if>
+			<if test="userType != null and userType.trim() != ''">
+				and `user_type` =#{userType}
+			</if>
+ 			
+		</where>
+		
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id asc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	 
+	<insert id="save" parameterType="com.ye.modules.cus.entity.UserEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into t_user
+		(
+			`username`, 
+			`password`, 
+			`nickname`, 
+			`phone`, 
+			`user_type`, 
+			`pic`, 
+			`sex`,   
+			`address`,   
+			`birthday`, 
+			`create_time` 
+		)
+		values
+		(
+			#{username}, 
+			#{password}, 
+			#{nickname}, 
+			#{phone}, 
+			#{userType}, 
+			#{pic}, 
+			#{sex},
+			#{address}, #{birthday},  
+			#{createTime} 
+		 
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.ye.modules.cus.entity.UserEntity">
+		update t_user 
+		<set>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="password != null">`password` = #{password}, </if>
+			<if test="nickname != null">`nickname` = #{nickname}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="userType != null">`user_type` = #{userType}, </if>
+			<if test="pic != null">`pic` = #{pic}, </if>
+			<if test="sex != null">`sex` = #{sex}, </if>
+			<if test="address != null">`address` = #{address}, </if>
+			<if test="birthday != null">`birthday` = #{birthday}, </if>
+	 
+			 	<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from t_user where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_user where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<select id="login" resultType="com.ye.modules.cus.entity.UserEntity">
+		select * from t_user where
+		`username` = #{username} and `password` =#{password}
+	</select>
+	<select id="loginByType" resultType="com.ye.modules.cus.entity.UserEntity">
+		select * from t_user where
+		`username` = #{username} and `password` =#{password} and `user_type`
+		=#{userType}
+	</select>
+</mapper>

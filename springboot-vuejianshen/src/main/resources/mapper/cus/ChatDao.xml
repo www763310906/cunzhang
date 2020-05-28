@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ye.modules.cus.dao.ChatDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.ye.modules.cus.entity.ChatEntity" id="chatMap">
+        <result property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="touserId" column="touser_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="pic" column="pic"/>
+    </resultMap>
+
+
+	<select id="queryChatList" resultType="com.ye.modules.cus.entity.ChatEntity">
+		select * from t_chat where (touser_id = #{touserId} and user_id = #{userId} )or( touser_id = #{userId} and user_id = #{touserId}) order by create_time asc      
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from t_chat 
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and  `name` like concat('%',#{name},'%')
+			</if>
+ 
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.ye.modules.cus.entity.ChatEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into t_chat
+		(
+			`content`, 
+			`touser_id`, 
+			`user_id`, 
+			`create_time`
+			
+		)
+		values
+		(
+			#{content}, 
+			#{touserId}, 
+			#{userId}, 
+			#{createTime}
+			
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.ye.modules.cus.entity.ChatEntity">
+		update t_chat 
+		<set>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="bokeId != null">`boke_id` = #{bokeId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from t_chat where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_chat where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

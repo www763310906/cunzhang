@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ye.modules.cus.dao.CommentDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.ye.modules.cus.entity.CommentEntity" id="commentMap">
+        <result property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="bokeId" column="boke_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.ye.modules.cus.entity.CommentEntity">
+		select * from t_comment where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.ye.modules.cus.entity.CommentEntity">
+		select * from t_comment
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and  `name` like concat('%',#{name},'%')
+			</if>
+ 
+		</where>
+		
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id asc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="queryListByBokeId" resultType="com.ye.modules.cus.entity.CommentEntity">
+		select * from t_comment where boke_id = #{value} order by create_time asc
+		
+	</select>
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from t_comment 
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and  `name` like concat('%',#{name},'%')
+			</if>
+ 
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.ye.modules.cus.entity.CommentEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into t_comment
+		(
+			`content`, 
+			`boke_id`, 
+			`user_id`, 
+			`create_time`
+		)
+		values
+		(
+			#{content}, 
+			#{bokeId}, 
+			#{userId}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.ye.modules.cus.entity.CommentEntity">
+		update t_comment 
+		<set>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="bokeId != null">`boke_id` = #{bokeId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from t_comment where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_comment where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,233 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页,
+	
+		{
+		
+			"path": "pages/login/login",
+		    "style": {
+		         "navigationBarTitleText": "Welcome"
+		
+		    }
+		},{
+		
+			"path": "pages/main/home",
+		    "style": {
+		        "navigationBarTitleText": "主页"
+		
+		    }
+		},{
+		
+			"path": "pages/main/frend",
+		    "style": {
+		        "navigationBarTitleText": "好友",
+					"enablePullDownRefresh": true 
+		
+		    }
+		}, {
+		
+			"path": "pages/main/frendadd",
+		    "style": {
+		        "navigationBarTitleText": "添加好友",
+					"enablePullDownRefresh": true 
+		
+		    }
+		},{
+		
+			"path": "pages/main/videoplayer",
+		    "style": {
+		        "navigationBarTitleText": "视频" 
+				 
+		
+		    }
+		},
+		 {
+		     "path" : "pages/main/boke",
+		     "style" : {
+		         "navigationBarTitleText" : "博客",
+		     	"enablePullDownRefresh" : true,
+				 
+		         "app-plus" : {
+		             "bounce" : "none",
+		             "titleNView" : {
+		                 "type" : "transparent",
+		                 "buttons" : [
+		                     {
+		                         "background" : "rgba(255,255,255,0.2)",
+		                         "color" : "#696969",
+		                         "type" : "none",
+		                         "fontSrc" : "/static/fonts/iconfont.ttf",
+		                         "text" : "\ue608" //小相机
+		                     }
+		                 ]
+		             }
+		         }
+		     }
+		 },
+		 
+		 {
+		     "path" : "pages/publish/publish",
+		     "style" : {
+		 		"navigationBarTitleText" : "发布"
+		 	}
+		 },
+		 {
+
+			"path": "pages/main/huidetail",
+		    "style": {
+		        "navigationBarTitleText": "博客详情"
+
+		    }
+		}, 
+		 
+		 {
+		
+			"path": "pages/main/video",
+		    "style": {
+		        "navigationBarTitleText": "视频" ,
+				"enablePullDownRefresh": true
+		
+		    }
+		}, 
+		 {
+		 
+		 	"path": "pages/main/chat",
+		     "style": {
+		         "navigationBarTitleText": "聊天" ,
+		 		"enablePullDownRefresh": true
+		 
+		     }
+		 }, 
+		 {
+		
+			"path": "pages/main/videodetail",
+		    "style": {
+		        "navigationBarTitleText": "在线视频"
+		
+		    }
+		}, 
+		 {
+		 
+		 	"path": "pages/main/frenddetail",
+		     "style": {
+		         "navigationBarTitleText": "用户详情"
+		 
+		     }
+		 }, 
+		 
+		 {
+
+			"path": "pages/user/user",
+		    "style": {
+		        "navigationBarTitleText": "我的"
+
+		    }
+		}, 
+		{
+		
+			"path": "pages/main/myboke",
+		    "style" : {
+		        "navigationBarTitleText" : "我的博客",
+		    	"enablePullDownRefresh" : true,
+		    				 
+		        "app-plus" : {
+		            "bounce" : "none",
+		            "titleNView" : {
+		                "type" : "transparent",
+		                "buttons" : [
+		                    {
+		                        "background" : "rgba(255,255,255,0.2)",
+		                        "color" : "#696969",
+		                        "type" : "none",
+		                        "fontSrc" : "/static/fonts/iconfont.ttf",
+		                        "text" : "\ue608" //小相机
+		                    }
+		                ]
+		            }
+		        }
+		    }
+		},
+		{
+		
+			"path": "pages/main/myvideo",
+		    "style": {
+		        "navigationBarTitleText": "我的视频"
+		
+		    }
+		},
+		 
+			 {
+		
+			"path": "pages/reg/reg",
+		    "style": {
+		        "navigationBarTitleText": "注册"
+		
+		    }
+		},
+		
+		 {
+
+			"path": "pages/user/userdetail",
+		    "style": {
+		        "navigationBarTitleText": "信息修改"
+
+		    }
+		},
+
+		 {
+
+			"path": "pages/main/videoadd",
+		    "style": {
+		        "navigationBarTitleText": "上传视频"
+
+		    }
+		} 
+	  
+		
+		 
+ 
+	],
+	"tabBar": {
+	    "color": "#7a7e83",
+	    "selectedColor": "#0faeff",
+	    "backgroundColor": "#ffffff",
+	    "list": [{
+	        "pagePath": "pages/main/home",
+	        "text": "主页",
+	        "iconPath": "static/img/home.png",
+	        "selectedIconPath": "static/img/homeHL.png"
+	    },{
+	        "pagePath": "pages/main/boke",
+	        "text": "博客",
+	        "iconPath": "static/img/boke.jpg",
+	        "selectedIconPath": "static/img/boke-select.jpg"
+	    },{
+	        "pagePath": "pages/main/videoplayer",
+	        "text": "视频",
+	        "iconPath": "static/img/gk.png",
+	        "selectedIconPath": "static/img/gkHL.png"
+	    } ,{
+	        "pagePath": "pages/main/frend",
+	        "text": "好友",
+	        "iconPath": "static/img/p.png",
+	        "selectedIconPath": "static/img/pHL.png"
+	    } , {
+	        "pagePath": "pages/user/user",
+	        "text": "我的",
+	        "iconPath": "static/img/user.png",
+	        "selectedIconPath": "static/img/userHL.png"
+	    }]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarBackgroundColor": "#0078FF",
+		"backgroundColor": "#ffffff"
+	},
+	"condition": { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [{
+			"name": "", //模式名称
+			"path": "", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
+	}
+}

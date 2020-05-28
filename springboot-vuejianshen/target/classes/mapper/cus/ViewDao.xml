@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ye.modules.cus.dao.ViewDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.ye.modules.cus.entity.ViewEntity" id="viewMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+	<select id="queryObject" resultType="com.ye.modules.cus.entity.ViewEntity">
+		select * from t_view where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.ye.modules.cus.entity.ViewEntity">
+		select * from t_view
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and  `name` like concat('%',#{name},'%')
+			</if>
+ 			 <if test="userId != null  ">
+				and  `user_id` =#{userId}
+			</if>
+		</where>
+		
+        <choose>
+          	  <when test="sidx == 'rand'  ">
+                order by rand()
+            </when>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id asc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from t_view 
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and  `name` like concat('%',#{name},'%')
+			</if>
+ 
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.ye.modules.cus.entity.ViewEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into t_view
+		(
+			`user_id`, 
+			`goods_id`, 
+			`create_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{goodsId}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.ye.modules.cus.entity.ViewEntity">
+		update t_view 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="goodsId != null">`goods_id` = #{goodsId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from t_view where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_view where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ye.modules.cus.dao.VideoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.ye.modules.cus.entity.VideoEntity" id="videoMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="content" column="content"/>
+        <result property="pic" column="pic"/>
+        <result property="video" column="video"/>
+        <result property="free" column="free"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.ye.modules.cus.entity.VideoEntity">
+		select * from t_video where id = #{value}
+	</select>
+	
+	<select id="queryListSearch" resultType="com.ye.modules.cus.entity.VideoEntity">
+		select * from t_video
+		<where>
+			<if test="name != null and name.trim() != ''">
+				 and  `name` like concat('%',#{name},'%') or   
+				user_id in (select id from t_user where nickname like concat('%',#{name},'%')order by create_time desc)
+			</if>
+		</where>	
+		
+        <choose>
+			<otherwise>
+                order by create_time desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	
+	<select id="queryList" resultType="com.ye.modules.cus.entity.VideoEntity">
+		select * from t_video
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and  `name` like concat('%',#{name},'%')
+			</if>
+ 			<if test="free != null and free.trim() != ''">
+				and  `free` =#{free} 
+			</if>
+			<if test="userId != null and userId.trim() != ''">
+				and  `user_id` =#{userId} 
+			</if>
+		</where>
+		
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by create_time desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from t_video 
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and  `name` like concat('%',#{name},'%')
+			</if>
+ 			<if test="free != null and free.trim() != ''">
+				and  `free` =#{free} 
+			</if>
+			<if test="userId != null and userId.trim() != ''">
+				and  `user_id` =#{userId} 
+			</if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.ye.modules.cus.entity.VideoEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into t_video
+		(
+			`name`, 
+			`content`, 
+			`pic`, 
+			`video`, 
+			`free`, 
+			`user_id`, 
+			`create_time`
+		)
+		values
+		(
+			#{name}, 
+			#{content}, 
+			#{pic}, 
+			#{video}, 
+			#{free}, 
+			#{userId}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.ye.modules.cus.entity.VideoEntity">
+		update t_video 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="pic != null">`pic` = #{pic}, </if>
+			<if test="video != null">`video` = #{video}, </if>
+			<if test="free != null">`free` = #{free}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from t_video where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_video where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
