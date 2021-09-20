@@ -23,7 +23,7 @@
 		<velocity.version>1.7</velocity.version>
 		
 		<quartz.version>2.3.0</quartz.version>
-		<shiro.version>1.4.0</shiro.version>
+		<shiro.version>1.8.0</shiro.version>
 		<kaptcha.version>0.0.9</kaptcha.version>
 		<qiniu.version>[7.2.0, 7.2.99]</qiniu.version>
 		<spring.version>4.3.3.RELEASE</spring.version>
